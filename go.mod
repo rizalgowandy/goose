@@ -7,7 +7,7 @@ require (
 	github.com/ClickHouse/clickhouse-go v1.5.4
 	github.com/containerd/continuity v0.2.2 // indirect
 	github.com/denisenkom/go-mssqldb v0.12.0
-	github.com/go-sql-driver/mysql v1.6.0
+	github.com/go-sql-driver/mysql v1.7.0
 	github.com/lib/pq v1.10.4
 	github.com/matryer/is v1.4.0
 	github.com/mattn/go-isatty v0.0.14 // indirect
