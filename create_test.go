@@ -2,7 +2,6 @@ package goose
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -12,6 +11,9 @@ import (
 
 func TestSequential(t *testing.T) {
 	t.Parallel()
+	if testing.Short() {
+		t.Skip("skip long running test")
+	}
 
 	dir := t.TempDir()
 	defer os.Remove("./bin/create-goose") // clean up
@@ -35,7 +37,7 @@ func TestSequential(t *testing.T) {
 		}
 	}
 
-	files, err := ioutil.ReadDir(dir)
+	files, err := os.ReadDir(dir)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -2,7 +2,6 @@ package goose
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -12,6 +11,9 @@ import (
 
 func TestFix(t *testing.T) {
 	t.Parallel()
+	if testing.Short() {
+		t.Skip("skip long running test")
+	}
 
 	dir := t.TempDir()
 	defer os.Remove("./bin/fix-goose") // clean up
@@ -36,7 +38,7 @@ func TestFix(t *testing.T) {
 		}
 	}
 
-	files, err := ioutil.ReadDir(dir)
+	files, err := os.ReadDir(dir)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -65,7 +67,7 @@ func TestFix(t *testing.T) {
 		}
 	}
 
-	files, err = ioutil.ReadDir(dir)
+	files, err = os.ReadDir(dir)
 	if err != nil {
 		t.Fatal(err)
 	}

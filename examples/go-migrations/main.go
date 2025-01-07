@@ -3,6 +3,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"log"
 	"os"
@@ -20,7 +21,7 @@ func main() {
 	flags.Parse(os.Args[1:])
 	args := flags.Args()
 
-	if len(args) < 2 {
+	if len(args) < 3 {
 		flags.Usage()
 		return
 	}
@@ -43,7 +44,8 @@ func main() {
 		arguments = append(arguments, args[3:]...)
 	}
 
-	if err := goose.Run(command, db, *dir, arguments...); err != nil {
+	ctx := context.Background()
+	if err := goose.RunContext(ctx, command, db, *dir, arguments...); err != nil {
 		log.Fatalf("goose %v: %v", command, err)
 	}
 }

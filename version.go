@@ -1,13 +1,19 @@
 package goose
 
 import (
+	"context"
 	"database/sql"
-
-	"github.com/pkg/errors"
+	"fmt"
 )
 
 // Version prints the current version of the database.
 func Version(db *sql.DB, dir string, opts ...OptionsFunc) error {
+	ctx := context.Background()
+	return VersionContext(ctx, db, dir, opts...)
+}
+
+// VersionContext prints the current version of the database.
+func VersionContext(ctx context.Context, db *sql.DB, dir string, opts ...OptionsFunc) error {
 	option := &options{}
 	for _, f := range opts {
 		f(option)
@@ -16,7 +22,7 @@ func Version(db *sql.DB, dir string, opts ...OptionsFunc) error {
 		var current int64
 		migrations, err := CollectMigrations(dir, minVersion, maxVersion)
 		if err != nil {
-			return errors.Wrap(err, "failed to collect migrations")
+			return fmt.Errorf("failed to collect migrations: %w", err)
 		}
 		if len(migrations) > 0 {
 			current = migrations[len(migrations)-1].Version
@@ -25,7 +31,7 @@ func Version(db *sql.DB, dir string, opts ...OptionsFunc) error {
 		return nil
 	}
 
-	current, err := GetDBVersion(db)
+	current, err := GetDBVersionContext(ctx, db)
 	if err != nil {
 		return err
 	}
